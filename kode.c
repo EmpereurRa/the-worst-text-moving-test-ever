@@ -23,7 +23,7 @@ int main (){
         int lefttoout = 0;
 
         al_start_timer(timer);
-        while(1){
+        while(!done){
                 al_wait_for_event(queue, &event);
                 switch(event.type){
                         case ALLEGRO_EVENT_TIMER:
@@ -36,8 +36,6 @@ int main (){
                                 lefttoright += 10;
 
                 }
-                if (done)
-                        break;
                 if(redraw && al_is_event_queue_empty(queue)){
                         al_clear_to_color(al_map_rgb(192, 192, 192));
                         al_draw_text(font, al_map_rgb(0, 33, 0), lefttoright, uptodown, lefttoout, "Welcome");
