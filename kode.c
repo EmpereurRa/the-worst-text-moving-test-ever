@@ -16,28 +16,40 @@ int main (){
 	al_register_event_source(queue, al_get_display_event_source(disp));
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 	
-	bool redraw = true;
-	int lefttoright = 0;
-	int uptodown = 0;
-	int lefttoout = 0;
+        
+        bool done = false;
+        bool redraw = true;
+        int lefttoright = 0;
+        int uptodown = 0;
+        int lefttoout = 0;
 
-	al_start_timer(timer);
-	while(1){
-		al_wait_for_event(queue, &event);
-		switch(event.type){
-			case ALLEGRO_EVENT_TIMER:
-				redraw = true;
-			case ALLEGRO_EVENT_DISPLAY_CLOSE:
-				break;
-			case ALLEGRO_EVENT_KEY_DOWN:
-				lefttoright += 10;
+        al_start_timer(timer);
+        while(1){
+                al_wait_for_event(queue, &event);
+                switch(event.type){
+                        case ALLEGRO_EVENT_TIMER:
+                                redraw = true;
+                                break;
+                        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                                done = true;
+                                break;
+                        case ALLEGRO_EVENT_KEY_DOWN:
+                                lefttoright += 10;
 
-		}
-		if(redraw && al_is_event_queue_empty(queue)){
-			al_clear_to_color(al_map_rgb(192, 192, 192));
-			al_draw_text(font, al_map_rgb(0, 33, 0), lefttoright, uptodown, lefttoout, "Welcome");
-			al_flip_display();
-			redraw = false;
-	        }
-	}
+                }
+                if (done)
+                        break;
+                if(redraw && al_is_event_queue_empty(queue)){
+                        al_clear_to_color(al_map_rgb(192, 192, 192));
+                        al_draw_text(font, al_map_rgb(0, 33, 0), lefttoright, uptodown, lefttoout, "Welcome");
+                        al_flip_display();
+                        redraw = false;
+                }
+        }
+
+        al_destroy_font(font);
+        al_destroy_display(disp);
+        al_destroy_timer(timer);
+        al_destroy_event_queue(queue);
+        return 0;
 }
